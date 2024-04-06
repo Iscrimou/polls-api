@@ -1,8 +1,8 @@
 import fastify from "fastify";
-import { createPoll } from "./routes/create-poll";
-import { showPoll } from "./routes/show-poll";
-import { voteOnPoll } from "./routes/vote-on-poll";
 import cookie from "@fastify/cookie";
+import websocket from "@fastify/websocket";
+import { pollResults } from "./ws/poll-results";
+import { routes } from "./routes";
 
 const app = fastify();
 
@@ -11,9 +11,10 @@ app.register(cookie, {
   hook: 'onRequest'
 });
 
-app.register(createPoll);
-app.register(showPoll);
-app.register(voteOnPoll);
+app.register(websocket);
+app.register(routes);
+
+app.register(pollResults);
 
 app.listen({ port: 3333 }).then(() => {
   console.log('listen 3333');
